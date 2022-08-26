@@ -1,12 +1,14 @@
 
 package lesson07.project.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lesson07.project.dto.Imperial;
 import lesson07.project.dto.Maximum;
 import lesson07.project.dto.Metric;
 import lombok.Data;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 public class Temperature {
 
