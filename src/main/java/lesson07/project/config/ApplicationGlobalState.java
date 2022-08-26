@@ -6,7 +6,7 @@ public final class ApplicationGlobalState {
 
     private static ApplicationGlobalState INSTANCE;
     private String selectedCity = null;
-    private final String API_KEY = "0d1tNZJPfzzT3qGokM18FGGxAUpt7hpj";//"vyYDRAGpczJRODGxcdqqiVGQHNtXDWfp";
+    private final String API_KEY = "vyYDRAGpczJRODGxcdqqiVGQHNtXDWfp";
     private final Languages LANGUAGE = Languages.ENGLISH;
 
     private ApplicationGlobalState() {
