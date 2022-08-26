@@ -79,17 +79,16 @@ public class AccuWeatherProvider implements WeatherProvider {
 
             String responseBody = client.newCall(request).execute().body().string();
 
-            int firstIndexBody = responseBody.indexOf("[{\"Date\"");
-            int lastIndexBody = responseBody.lastIndexOf("}");
-            responseBody = responseBody.substring(firstIndexBody, lastIndexBody);
+            if (objectMapper.readTree(responseBody).size() > 0) {
+                String forecastInfo = objectMapper.readTree(responseBody).at("/DailyForecasts").toString();
+                List<WeatherResponse> weatherList = objectMapper.readValue(forecastInfo, new TypeReference<List<WeatherResponse>>() {});
 
-            List<WeatherResponse> weatherList = objectMapper.readValue(responseBody, new TypeReference<List<WeatherResponse>>() {});
-
-            for (WeatherResponse weather: weatherList) {
-                System.out.println("In city " + ApplicationGlobalState.getInstance().getSelectedCity() + " on date " + weather.getDate().substring(0,10) +
-                    " the following weather conditions are being expected: Minimum temperature "  + weather.getTemperature().getMinimum().getValue() + "°С. Maximum temperature " +
-                    weather.getTemperature().getMaximum().getValue() + "°С. Day - " + weather.getDay().getIconPhrase() + ". Night - " + weather.getNight().getIconPhrase() + ".");
-            }
+                for (WeatherResponse weather: weatherList) {
+                    System.out.println("In city " + ApplicationGlobalState.getInstance().getSelectedCity() + " on date " + weather.getDate().substring(0,10) +
+                        " the following weather conditions are being expected: Minimum temperature "  + weather.getTemperature().getMinimum().getValue() + "°С. Maximum temperature " +
+                        weather.getTemperature().getMaximum().getValue() + "°С. Day - " + weather.getDay().getIconPhrase() + ". Night - " + weather.getNight().getIconPhrase() + ".");
+                }
+            } else throw new IOException("Weather forecasts are not available");
         }
     }
 
