@@ -40,7 +40,7 @@ public class Controller {
     }
 
     public void exitApp() throws IOException {
-        System.out.println("Завершаю работу");
+        System.out.println("I'm finishing work");
         System.exit(0);
     }
 

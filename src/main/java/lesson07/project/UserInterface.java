@@ -13,9 +13,9 @@ public class UserInterface {
         Scanner scanner = new Scanner(System.in);
         while (true) {
 
-            System.out.println("Введите ответ: 1 - Получить текущую погоду, " +
-                "2 - Получить погоду на следующие 5 дней, " +
-                "3 - Чтобы завершить работу");
+            System.out.println("Make your choice and enter it: 1 - Get the current weather, " +
+                "2 - Get 5 day weather forecast, " +
+                "3 - Exit the application");
             String result = scanner.nextLine();
 
             try {
@@ -28,7 +28,7 @@ public class UserInterface {
             checkIsExit(result);
 
             if (result.equals("1") || result.equals("2")) {
-                System.out.println("Введите название города (язык ввода: '" + ApplicationGlobalState.getInstance().getLanguage().getTitle() + "'):");
+                System.out.println("Enter the city name (use '" + ApplicationGlobalState.getInstance().getLanguage().getTitle() + "' language):");
                 String city = scanner.nextLine();
                 setGlobalCity(city);
             }
