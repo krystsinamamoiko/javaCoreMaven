@@ -4,14 +4,18 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lesson07.project.config.ApplicationGlobalState;
 import lesson07.project.dto.WeatherResponse;
+import lesson07.project.entity.WeatherData;
 import lesson07.project.enums.Languages;
 import lesson07.project.enums.Periods;
+import lesson07.project.repository.DatabaseRepository;
+import lesson07.project.repository.DatabaseRepositorySQLiteImpl;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 public class AccuWeatherProvider implements WeatherProvider {
@@ -28,8 +32,10 @@ public class AccuWeatherProvider implements WeatherProvider {
     private final OkHttpClient client = new OkHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    private final DatabaseRepository repository = new DatabaseRepositorySQLiteImpl();
+
     @Override
-    public void getWeather(Periods periods) throws IOException {
+    public void getWeather(Periods periods) throws IOException, SQLException {
         String cityKey = detectCityKey();
 
         if (periods.equals(Periods.NOW)) {
@@ -87,9 +93,28 @@ public class AccuWeatherProvider implements WeatherProvider {
                     System.out.println("In city " + ApplicationGlobalState.getInstance().getSelectedCity() + " on date " + weather.getDate().substring(0,10) +
                         " the following weather conditions are being expected: Minimum temperature "  + weather.getTemperature().getMinimum().getValue() + "°С. Maximum temperature " +
                         weather.getTemperature().getMaximum().getValue() + "°С. Day - " + weather.getDay().getIconPhrase() + ". Night - " + weather.getNight().getIconPhrase() + ".");
+
+                    WeatherData weatherData = new WeatherData(ApplicationGlobalState.getInstance().getSelectedCity(),
+                        weather.getDate().substring(0,10), weather.getDay().getIconPhrase(), weather.getNight().getIconPhrase(),
+                        weather.getTemperature().getMinimum().getValue(), weather.getTemperature().getMaximum().getValue()
+                    );
+
+                    repository.saveWeatherData(weatherData);
                 }
             } else throw new IOException("Weather forecasts are not available");
         }
+        if (periods.equals(Periods.BASE)) {
+            getAllFromDb();
+        }
+    }
+
+    @Override
+    public List<WeatherData> getAllFromDb() throws SQLException, IOException {
+        List<WeatherData> weatherDataList = repository.getAllSavedData();
+        for (WeatherData weatherData : weatherDataList) {
+            System.out.println(weatherData);
+        }
+        return weatherDataList;
     }
 
     public String detectCityKey() throws IOException {

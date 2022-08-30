@@ -3,19 +3,21 @@ package lesson07.project;
 import lesson07.project.config.ApplicationGlobalState;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class UserInterface {
 
     private final Controller controller = new Controller();
 
-    public void runApplication() throws IOException {
+    public void runApplication() throws IOException, SQLException {
         Scanner scanner = new Scanner(System.in);
         while (true) {
 
             System.out.println("Make your choice and enter it: 1 - Get the current weather, " +
                 "2 - Get 5 day weather forecast, " +
-                "3 - Exit the application");
+                "3 - Get weather information from Database or " +
+                "4 - Exit the application");
             String result = scanner.nextLine();
 
             try {
@@ -42,8 +44,8 @@ public class UserInterface {
         }
     }
 
-    private void checkIsExit(String result) throws IOException {
-        if (result.equals("3")) {
+    private void checkIsExit(String result) {
+        if (result.equals("4")) {
             controller.exitApp();
         }
     }
@@ -63,15 +65,15 @@ public class UserInterface {
         int answer;
         try {
             answer = Integer.parseInt(userInput);
-            if (answer >= 4){
-                throw new IOException("Incorrect user input: character must be less then 5!");
+            if (answer >= 5){
+                throw new IOException("Incorrect user input: character must be 1, 2, 3 or 4!");
             }
         } catch (NumberFormatException e) {
             throw new IOException("Incorrect user input: character is not numeric!");
         }
     }
 
-    private void notifyController(String input) throws IOException {
+    private void notifyController(String input) throws IOException, SQLException {
         controller.onUserInput(input);
     }
 }

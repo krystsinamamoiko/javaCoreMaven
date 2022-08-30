@@ -8,6 +8,7 @@ public final class ApplicationGlobalState {
     private String selectedCity = null;
     private final String API_KEY = "vyYDRAGpczJRODGxcdqqiVGQHNtXDWfp";
     private final Languages LANGUAGE = Languages.ENGLISH;
+    private final String DB_FILENAME = "sqliteDBData.db";
 
     private ApplicationGlobalState() {
     }
@@ -34,5 +35,9 @@ public final class ApplicationGlobalState {
 
     public Languages getLanguage() {
         return this.LANGUAGE;
+    }
+
+    public String getDbFileName() {
+        return DB_FILENAME;
     }
 }
