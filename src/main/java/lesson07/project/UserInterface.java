@@ -44,7 +44,7 @@ public class UserInterface {
         }
     }
 
-    private void checkIsExit(String result) {
+    private void checkIsExit(String result) throws IOException, SQLException {
         if (result.equals("4")) {
             controller.exitApp();
         }

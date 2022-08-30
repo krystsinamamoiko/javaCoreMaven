@@ -4,6 +4,8 @@ import lesson07.project.enums.Functionality;
 import lesson07.project.enums.Periods;
 import lesson07.project.provider.AccuWeatherProvider;
 import lesson07.project.provider.WeatherProvider;
+import lesson07.project.repository.DatabaseRepository;
+import lesson07.project.repository.DatabaseRepositorySQLiteImpl;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -14,6 +16,7 @@ public class Controller {
 
     WeatherProvider weatherProvider = new AccuWeatherProvider();
     Map<Integer, Functionality> variantResult = new HashMap();
+    DatabaseRepository repository = new DatabaseRepositorySQLiteImpl();
 
     public Controller() {
         variantResult.put(1, Functionality.GET_CURRENT_WEATHER);
@@ -44,8 +47,9 @@ public class Controller {
         }
     }
 
-    public void exitApp() {
+    public void exitApp() throws IOException, SQLException {
         System.out.println("I'm finishing work");
+        repository.closeConnection();
         System.exit(0);
     }
 
